@@ -28,18 +28,32 @@ module.exports = (robot) ->
 
     msg.send "Getting what's managed by r10k on #{server}..."
     exec cmd, (error, stdout, stderr) ->
-      msg.send error
-      msg.send stdout
-      msg.send stderr
+      if stdout isnt null
+        msg.send stdout
+
+      if stderr isnt null and stderr.length > 0
+        msg.send "stderr: " + stderr
+
+      if error isnt null
+        msg.send "error exit code: " + error.code
+        msg.send "error exit signal: " + error.signal
 
   robot.respond /run r10k/i, (msg) ->
     cmd = "#{r10k} environment --puppetfile -v error"
 
     msg.send "Deploying all environments on #{server}..."
     exec cmd, (error, stdout, stderr) ->
-      msg.send error
-      msg.send stdout
-      msg.send stderr
+      if stdout isnt null
+        msg.send stdout
+
+      if stderr isnt null and stderr.length > 0
+        msg.send "stderr: " + stderr
+
+      if error isnt null
+        msg.send "error exit code: " + error.code
+        msg.send "error exit signal: " + error.signal
+      else
+        msg.send "Successuflly deployed environments"
 
   robot.respond /r10k env (.+)/i, (msg) ->
     environment = msg.match[1]
@@ -47,9 +61,18 @@ module.exports = (robot) ->
 
     msg.send "Deploying #{environment} on #{server}..."
     exec cmd, (error, stdout, stderr) ->
-      msg.send error
-      msg.send stdout
-      msg.send stderr
+      if stdout isnt null
+        msg.send stdout
+
+      if stderr isnt null and stderr.length > 0
+        msg.send "stderr: " + stderr
+
+      if error isnt null
+        msg.send "error exit code: " + error.code
+        msg.send "error exit signal: " + error.signal
+      else
+        msg.send "Successuflly deployed #{environment}"
+
 
   robot.respond /r10k module (\w+)/i, (msg) ->
     module = msg.match[1]
@@ -57,6 +80,14 @@ module.exports = (robot) ->
 
     msg.send "Deploying #{module} on #{server}..."
     exec cmd, (error, stdout, stderr) ->
-      msg.send error
-      msg.send stdout
-      msg.send stderr
+      if stdout isnt null
+        msg.send stdout
+
+      if stderr isnt null and stderr.length > 0
+        msg.send "stderr: " + stderr
+
+      if error isnt null
+        msg.send "error exit code: " + error.code
+        msg.send "error exit signal: " + error.signal
+      else
+        msg.send "Successuflly deployed #{module}"
